@@ -1,5 +1,5 @@
-import OrdersRoute from './src/routes/orders';
-
+require('dotenv').config();
+import OrdersRoute from './routes/OrdersRoute';
 const express = require('express');
 const app = express();
 

@@ -4,16 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const OrderController_1 = __importDefault(require("../controllers/OrderController"));
 class OrdersRoute {
     constructor() {
         this.router = express_1.default.Router();
+        this.controller = new OrderController_1.default();
         this.initializeRoutes();
     }
     initializeRoutes() {
-        this.router.get('/', this.getAllActiveOrders);
-    }
-    getAllActiveOrders(req, res) {
-        res.json({ message: 'object test' });
+        this.router.get('/', this.controller.getAllActiveOrders);
     }
     getRouter() {
         return this.router;
