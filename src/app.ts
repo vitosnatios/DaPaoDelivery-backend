@@ -1,5 +1,7 @@
 require('dotenv').config();
 import OrdersRoute from './routes/OrdersRoute';
+import Product from './routes/Product';
+import ServerStatus from './routes/ServerStatus';
 const express = require('express');
 const app = express();
 var cors = require('cors');
@@ -13,6 +15,8 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use('/server-status', new ServerStatus().getRouter());
 app.use('/api/orders', new OrdersRoute().getRouter());
+app.use('/api/product', new Product().getRouter());
 
 app.listen(3000, () => console.log('Server connected on port ' + port));
