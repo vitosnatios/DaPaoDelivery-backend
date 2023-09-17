@@ -1,10 +1,10 @@
+const express = require('express');
+const app = express();
+var cors = require('cors');
 require('dotenv').config();
 import OrdersRoute from './routes/OrdersRoute';
 import Product from './routes/Product';
 import ServerStatus from './routes/ServerStatus';
-const express = require('express');
-const app = express();
-var cors = require('cors');
 
 const port = process.env.PORT || 3000;
 

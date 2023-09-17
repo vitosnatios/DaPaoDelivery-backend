@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const express = require('express');
+const app = express();
+var cors = require('cors');
 require('dotenv').config();
 const OrdersRoute_1 = __importDefault(require("./routes/OrdersRoute"));
 const Product_1 = __importDefault(require("./routes/Product"));
 const ServerStatus_1 = __importDefault(require("./routes/ServerStatus"));
-const express = require('express');
-const app = express();
-var cors = require('cors');
 const port = process.env.PORT || 3000;
 var corsOptions = {
     origin: process.env.FRONTEND_BASE_URL,

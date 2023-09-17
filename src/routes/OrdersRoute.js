@@ -13,6 +13,7 @@ class OrdersRoute {
     }
     initializeRoutes() {
         this.router.get('/', this.controller.getAllActiveOrders);
+        this.router.post('/register', this.controller.registerNewOrder);
     }
     getRouter() {
         return this.router;

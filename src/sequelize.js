@@ -11,5 +11,6 @@ const sequelize = new sequelize_1.Sequelize({
     define: {
         timestamps: false,
     },
+    logging: false,
 });
 exports.default = sequelize;
