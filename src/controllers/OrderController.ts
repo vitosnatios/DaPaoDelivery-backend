@@ -40,36 +40,35 @@ export default class OrderController {
       const { order_products }: { order_products: IOrderProduct[] } = req.body;
       const currentDate = new Date().toISOString();
       const transaction = await sequelize.transaction();
+
       const newOrder = await Order.create(
-        {
-          date: currentDate,
-          closed: false,
-        },
+        { date: currentDate, closed: false },
         { transaction }
       );
+
       const productIds = order_products.map((product) => product.id);
-      const products = await Product.findAll({
-        where: {
-          id: productIds,
-        },
-      });
-      const productStockMap = new Map();
-      products.forEach((product) => {
-        productStockMap.set(product.id, Number(product.stock));
-      });
+
+      const products = await Product.findAll({ where: { id: productIds } });
+      const productStockMap = new Map(
+        products.map((product) => [product.id, Number(product.stock)])
+      );
 
       const productQuantity = new Map();
+
       for (const product of order_products) {
-        if (
-          !productStockMap.has(product.id) ||
-          productStockMap.get(product.id) < Number(product.quantity)
-        ) {
-          await transaction.rollback();
-          return res.status(400).json({ message: 'Product out of stock' });
-        }
-        productQuantity.set(product.id, product.quantity);
-        const currentStock = productStockMap.get(product.id);
+        const productId = product.id;
+        const currentStock = productStockMap.get(Number(productId));
         const purchased = Number(product.quantity);
+
+        if (!currentStock || currentStock < purchased) {
+          await transaction.rollback();
+          return res.status(400).json({
+            message: `Product with id: "${product.id}" out of stock. ${currentStock} left on stock`,
+          });
+        }
+
+        productQuantity.set(productId, purchased);
+
         await OrderProduct.create(
           {
             product_name: product.product_name,
@@ -79,22 +78,19 @@ export default class OrderController {
           },
           { transaction }
         );
-        productStockMap.set(product.id, currentStock - purchased);
+
+        const newStock = currentStock - purchased;
+        await Product.update(
+          {
+            stock: newStock,
+            purchased: sequelize.literal(`purchased + ${purchased}`),
+          },
+          { where: { id: productId }, transaction }
+        );
       }
-      for (const [productId, purchased] of productStockMap) {
-        if (productQuantity.has(productId)) {
-          await Product.update(
-            {
-              stock: purchased,
-              purchased: sequelize.literal(
-                `purchased + ${productQuantity.get(productId)}`
-              ),
-            },
-            { where: { id: productId }, transaction }
-          );
-        }
-      }
+
       await transaction.commit();
+
       const responseOrder = {
         id: newOrder.id,
         date: newOrder.date,
@@ -108,12 +104,42 @@ export default class OrderController {
           })
         ),
       };
+
       res.status(201).json(responseOrder);
     } catch (error) {
       console.error(error);
       res
         .status(500)
         .json({ message: 'Error trying to register the new order.' });
+    }
+  }
+
+  async completeOrders(req: Request, res: Response) {
+    try {
+      const { orderIds }: { orderIds: number[] } = req.body;
+
+      for (const orderId of orderIds) {
+        const order = await Order.findByPk(orderId);
+        if (!order) throw new Error('Item não encontrado.');
+        if (
+          typeof order === 'object' &&
+          '_previousDataValues' in order &&
+          order._previousDataValues &&
+          typeof order._previousDataValues === 'object' &&
+          'closed' in order._previousDataValues &&
+          order._previousDataValues.closed
+        )
+          throw new Error('Encomenda já foi realizada.');
+        if (order) {
+          await order.update({ closed: true });
+        }
+      }
+      res
+        .status(200)
+        .json({ message: 'Orders marked as completed successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error completing orders' });
     }
   }
 }

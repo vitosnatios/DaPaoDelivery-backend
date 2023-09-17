@@ -12,6 +12,7 @@ export default class OrdersRoute {
   private initializeRoutes() {
     this.router.get('/', this.controller.getAllActiveOrders);
     this.router.post('/register', this.controller.registerNewOrder);
+    this.router.put('/update', this.controller.completeOrders);
   }
 
   public getRouter() {
