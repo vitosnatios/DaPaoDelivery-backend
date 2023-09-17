@@ -11,6 +11,7 @@ export default class Product {
 
   private initializeRoutes() {
     this.router.get('/get-all', this.controller.getAllProducts);
+    this.router.post('/register', this.controller.registerNewProduct);
   }
 
   public getRouter() {

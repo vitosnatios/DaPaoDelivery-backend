@@ -17,6 +17,9 @@ const OrderProduct_1 = __importDefault(require("../models/OrderProduct"));
 const Product_1 = __importDefault(require("../models/Product"));
 const sequelize_1 = __importDefault(require("../sequelize"));
 class OrderController {
+    getAllOrders() {
+        return __awaiter(this, void 0, void 0, function* () { });
+    }
     getAllActiveOrders(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

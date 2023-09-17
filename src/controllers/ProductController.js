@@ -28,5 +28,38 @@ class ProductController {
             }
         });
     }
+    registerNewProduct(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { name, price, stock } = req.body;
+                if (!name.trim() || !price.trim() || !stock.trim()) {
+                    return res
+                        .status(400)
+                        .json({ message: 'Por favor, preencha todos campos.' });
+                }
+                const existingProduct = yield Product_1.default.findOne({ where: { name } });
+                if (existingProduct) {
+                    return res
+                        .status(400)
+                        .json({ message: 'Já existe um produto com esse nome.' });
+                }
+                const newProduct = yield Product_1.default.create({
+                    name,
+                    price,
+                    stock,
+                    purchased: 0,
+                });
+                res.status(201).json({
+                    message: 'Registrado com sucesso.',
+                    product: newProduct,
+                });
+            }
+            catch (error) {
+                console.error(error);
+                const message = error instanceof Error ? error.message : 'Algo deu errado.';
+                res.status(500).json({ message: message });
+            }
+        });
+    }
 }
 exports.default = ProductController;

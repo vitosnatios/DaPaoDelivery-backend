@@ -15,10 +15,12 @@ export interface IOrder {
   order_products: IOrderProduct[];
   date: string;
   totalPrice?: number;
-  closed: false;
+  closed: boolean;
 }
 
 export default class OrderController {
+  async getAllOrders() {}
+
   async getAllActiveOrders(req: Request, res: Response) {
     try {
       const activeOrders = await Order.findAll({

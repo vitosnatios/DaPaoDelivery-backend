@@ -13,6 +13,7 @@ class Product {
     }
     initializeRoutes() {
         this.router.get('/get-all', this.controller.getAllProducts);
+        this.router.post('/register', this.controller.registerNewProduct);
     }
     getRouter() {
         return this.router;
