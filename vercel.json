@@ -1,12 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "destination": "/api"
-    },
-    {
-      "source": "/server-status",
-      "destination": "/server-status"
     }
   ]
 }

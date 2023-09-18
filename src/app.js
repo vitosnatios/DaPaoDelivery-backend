@@ -21,3 +21,4 @@ app.use('/server-status', new ServerStatus_1.default().getRouter());
 app.use('/api/orders', new OrdersRoute_1.default().getRouter());
 app.use('/api/product', new Product_1.default().getRouter());
 app.listen(3000, () => console.log('Server connected on port ' + port));
+exports.default = app;
