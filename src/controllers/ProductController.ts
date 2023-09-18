@@ -10,7 +10,7 @@ export default class ProductController {
       console.error(error);
       res
         .status(500)
-        .json({ message: 'An error occurred while fetching active orders.' });
+        .json({ message: 'Houve algum erro ao baixar as encomendas ativas.' });
     }
   }
 
@@ -39,7 +39,7 @@ export default class ProductController {
       });
       res.status(201).json({
         message: 'Registrado com sucesso.',
-        // product: newProduct,
+        product: newProduct,
       });
     } catch (error: unknown) {
       console.error(error);
@@ -61,10 +61,40 @@ export default class ProductController {
           id: productIds,
         },
       });
-      res.status(200).json({ message: 'Products deleted successfully' });
+      res.status(200).json({ message: 'Produtos deletados com sucesso' });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Error deleting products' });
+      res.status(500).json({ message: 'Erro ao deletar produtos.' });
+    }
+  }
+
+  async atualizarPreco(req: Request, res: Response) {
+    try {
+      const priceUpdates: Record<string, number> = req.body;
+      if (!priceUpdates || Object.keys(priceUpdates).length === 0) {
+        return res.status(400).json({ message: 'Input inválido.' });
+      }
+      const productIds = Object.keys(priceUpdates).map((key) =>
+        parseInt(key, 10)
+      );
+      const products = await Product.findAll({
+        where: { id: productIds },
+      });
+      await Promise.all(
+        products.map(async (product) => {
+          const updatedPrice = priceUpdates[product.id];
+          if (updatedPrice !== undefined) {
+            product.price = parseFloat(updatedPrice.toFixed(2));
+            await product.save();
+          }
+        })
+      );
+      res.status(200).json({ message: 'Preço(s) atualizado(s) com sucesso.' });
+    } catch (error: unknown) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ message: 'Houve algum problema ao atuaizar os preços.' });
     }
   }
 }

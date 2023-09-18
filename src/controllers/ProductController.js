@@ -24,7 +24,7 @@ class ProductController {
                 console.error(error);
                 res
                     .status(500)
-                    .json({ message: 'An error occurred while fetching active orders.' });
+                    .json({ message: 'Houve algum erro ao baixar as encomendas ativas.' });
             }
         });
     }
@@ -54,7 +54,7 @@ class ProductController {
                 });
                 res.status(201).json({
                     message: 'Registrado com sucesso.',
-                    // product: newProduct,
+                    product: newProduct,
                 });
             }
             catch (error) {
@@ -78,11 +78,39 @@ class ProductController {
                         id: productIds,
                     },
                 });
-                res.status(200).json({ message: 'Products deleted successfully' });
+                res.status(200).json({ message: 'Produtos deletados com sucesso' });
             }
             catch (error) {
                 console.error(error);
-                res.status(500).json({ message: 'Error deleting products' });
+                res.status(500).json({ message: 'Erro ao deletar produtos.' });
+            }
+        });
+    }
+    atualizarPreco(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const priceUpdates = req.body;
+                if (!priceUpdates || Object.keys(priceUpdates).length === 0) {
+                    return res.status(400).json({ message: 'Input inválido.' });
+                }
+                const productIds = Object.keys(priceUpdates).map((key) => parseInt(key, 10));
+                const products = yield Product_1.default.findAll({
+                    where: { id: productIds },
+                });
+                yield Promise.all(products.map((product) => __awaiter(this, void 0, void 0, function* () {
+                    const updatedPrice = priceUpdates[product.id];
+                    if (updatedPrice !== undefined) {
+                        product.price = parseFloat(updatedPrice.toFixed(2));
+                        yield product.save();
+                    }
+                })));
+                res.status(200).json({ message: 'Preço(s) atualizado(s) com sucesso.' });
+            }
+            catch (error) {
+                console.error(error);
+                res
+                    .status(500)
+                    .json({ message: 'Houve algum problema ao atuaizar os preços.' });
             }
         });
     }
