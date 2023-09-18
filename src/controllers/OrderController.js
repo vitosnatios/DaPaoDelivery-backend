@@ -41,6 +41,10 @@ class OrderController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const { order_products } = req.body;
+                order_products.forEach(({ quantity }) => {
+                    if (isNaN(quantity))
+                        throw new Error('Preencha a quantidade corretamente.');
+                });
                 const currentDate = new Date().toISOString();
                 const transaction = yield sequelize_1.default.transaction();
                 const newOrder = yield Order_1.default.create({ date: currentDate, closed: false }, { transaction });

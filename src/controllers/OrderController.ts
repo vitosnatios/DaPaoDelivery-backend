@@ -40,6 +40,11 @@ export default class OrderController {
   async registerNewOrder(req: Request, res: Response) {
     try {
       const { order_products }: { order_products: IOrderProduct[] } = req.body;
+      order_products.forEach(({ quantity }: { quantity: any }) => {
+        if (isNaN(quantity))
+          throw new Error('Preencha a quantidade corretamente.');
+      });
+
       const currentDate = new Date().toISOString();
       const transaction = await sequelize.transaction();
 

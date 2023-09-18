@@ -17,6 +17,9 @@ export default class ProductController {
   async registerNewProduct(req: Request, res: Response) {
     try {
       const { name, price, stock } = req.body;
+      if (isNaN(price) || isNaN(price)) {
+        throw new Error('Preencha corretamente.');
+      }
       if (!name.trim() || !price.trim() || !stock.trim()) {
         return res
           .status(400)
@@ -36,13 +39,32 @@ export default class ProductController {
       });
       res.status(201).json({
         message: 'Registrado com sucesso.',
-        product: newProduct,
+        // product: newProduct,
       });
     } catch (error: unknown) {
       console.error(error);
       const message =
         error instanceof Error ? error.message : 'Algo deu errado.';
       res.status(500).json({ message: message });
+    }
+  }
+
+  async deleteProducts(req: Request, res: Response) {
+    try {
+      const productIds = req.body;
+      if (!Array.isArray(productIds) || productIds.length === 0) {
+        return res.status(400).json({ message: 'Algum id está inválido.' });
+      }
+      if (!productIds.length) throw new Error('Selecione algum produto.');
+      await Product.destroy({
+        where: {
+          id: productIds,
+        },
+      });
+      res.status(200).json({ message: 'Products deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error deleting products' });
     }
   }
 }
