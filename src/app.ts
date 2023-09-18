@@ -20,5 +20,3 @@ app.use('/api/orders', new OrdersRoute().getRouter());
 app.use('/api/product', new Product().getRouter());
 
 app.listen(3000, () => console.log('Server connected on port ' + port));
-
-export default app;
