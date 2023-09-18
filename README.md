@@ -2,9 +2,9 @@
 
 ### Node + TypeScript + Express + MySQL + Sequelize
 
-- [Website url](http://www.google.com)
+- [Website url](https://da-pao-delivery-frontend.vercel.app/)
 
-- [Frontend repo](http://www.google.com)
+- [Frontend repo](https://github.com/vitosnatios/DaPaoDelivery-Frontend)
 
 - Configure the .env:
 
