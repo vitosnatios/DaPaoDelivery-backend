@@ -2,7 +2,7 @@
 
 ### Node + TypeScript + Express + MySQL + Sequelize
 
-- [Website url](https://da-pao-delivery-frontend.vercel.app/)
+- [Website url](https://da-pao-delivery.vercel.app/)
 
 - [Frontend repo](https://github.com/vitosnatios/DaPaoDelivery-Frontend)
 
