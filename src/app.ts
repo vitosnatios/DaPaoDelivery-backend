@@ -13,7 +13,7 @@ var corsOptions = {
   optionsSuccessStatus: 200,
 };
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 app.use('/server-status', new ServerStatus().getRouter());
 app.use('/api/orders', new OrdersRoute().getRouter());
