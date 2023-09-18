@@ -1,15 +1,22 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "src/app.js",
-      "use": "@now/node"
+  "functions": {
+    "api": {
+      "handler": "src/app.handler",
+      "memory": 256
     }
-  ],
+  },
   "routes": [
     {
+      "src": "/api/([^/]+)(/.*)?",
+      "dest": "/api$2"
+    },
+    {
+      "src": "/server-status",
+      "dest": "/server-status"
+    },
+    {
       "src": "/(.*)",
-      "dest": "src/app.js"
+      "dest": "/api$1"
     }
   ]
 }
