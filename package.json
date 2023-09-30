@@ -4,10 +4,7 @@
   "description": "",
   "main": "src/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "start": "ts-node api/index.ts",
-    "vercel-build": "echo ignoring the real build command dxd"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
@@ -18,12 +15,12 @@
     "express": "^4.18.2",
     "mysql2": "^3.6.1",
     "sequelize": "^6.33.0",
-    "sequelize-typescript": "^2.1.5",
-    "ts-node": "^10.9.1"
+    "sequelize-typescript": "^2.1.5"
   },
   "devDependencies": {
     "@types/node": "^20.6.2",
     "sequelize-cli": "^6.6.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "ts-node": "^10.9.1"
   }
 }
