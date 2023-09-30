@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "ts-node api/index.ts"
+    "start": "ts-node api/index.ts",
+    "vercel-build": "echo ignoring the real build command dxd"
   },
   "author": "",
   "license": "ISC",
